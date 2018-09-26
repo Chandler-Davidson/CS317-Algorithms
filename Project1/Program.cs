@@ -10,10 +10,14 @@ namespace Project1
     {
         static void Main(string[] args)
         {
-            var p = new Parser();
+            var p = new Parser<double>();
             var matrix = p.ParseFile();
 
-            Console.WriteLine(matrix.ToString());
+            Console.WriteLine(string.Join(" ", matrix[0]));
+
+            matrix.Quicksort(matrix[0], 0, matrix[0].Count - 1);
+
+            Console.WriteLine(string.Join(" ", matrix[0]));
         }
     }
 }

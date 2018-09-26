@@ -7,19 +7,34 @@ using System.Threading.Tasks;
 
 namespace Project1
 {
-    class Parser
+    class Parser<T> where T : IComparable<T>
     {
         public string FilePath { get; set; } = "input.txt";
 
-        public Matrix ParseFile()
+        /// <summary>
+        /// Parses the input file given by the <see cref="T:Project1.FilePath`1"/> property.
+        /// </summary>
+        /// <returns>The file.</returns>
+        public Matrix<T> ParseFile()
         {
-            var fileLines = File.ReadAllLines(FilePath);
-            var matrix = new Matrix();
+            try 
+            {
+                var fileLines = File.ReadAllLines(FilePath);
+                var matrix = new Matrix<T>();
 
-            matrix.AddRange(fileLines.Skip(1)
-                .Select(x => x.Split(' ').Select(y => double.Parse(y)).ToList()));
+                matrix.AddRange(fileLines.Skip(1)
+                    .Select(x => x.Split(' ')
+                        .Select(y => (T)Convert.ChangeType(y, typeof(T))).ToList()));
 
-            return matrix;
+                return matrix;
+            }
+
+            catch(System.FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return new Matrix<T>();
         }
     }
 }
