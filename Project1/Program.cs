@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Project1
 {
@@ -13,11 +10,15 @@ namespace Project1
             var p = new Parser<double>();
             var matrix = p.ParseFile();
 
-            Console.WriteLine(string.Join(" ", matrix[0]));
+            Console.WriteLine(matrix);
 
-            matrix.Quicksort(matrix[0], 0, matrix[0].Count - 1);
+            matrix.SortRowsIndividually();
 
-            Console.WriteLine(string.Join(" ", matrix[0]));
+            Console.WriteLine(matrix);
+
+
+            File.WriteAllText("cmd0031_1.txt", matrix.GenerateReport());
+            File.WriteAllText("cmd0031_2.txt", matrix.GenerateReport());
         }
     }
 }
