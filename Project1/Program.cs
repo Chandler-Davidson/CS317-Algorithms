@@ -7,8 +7,8 @@ namespace Project1
     {
         static void Main(string[] args)
         {
-            var p = new Parser<double>();
-            var matrix = p.ParseFile();
+            var parser = new Parser<double>();
+            var matrix = parser.ParseFile();
 
             Console.WriteLine(matrix);
 

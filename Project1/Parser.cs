@@ -6,6 +6,10 @@ namespace Project1
 {
     class Parser<T> where T : IComparable<T>
     {
+        /// <summary>
+        /// Gets or sets the file path for the input file.
+        /// </summary>
+        /// <value>The file path.</value>
         public string FilePath { get; set; } = "input.txt";
 
         /// <summary>
@@ -14,7 +18,7 @@ namespace Project1
         /// <returns>The file.</returns>
         public Matrix<T> ParseFile()
         {
-            try 
+            try
             {
                 var fileLines = File.ReadAllLines(FilePath);
                 var matrix = new Matrix<T>();
@@ -26,7 +30,7 @@ namespace Project1
                 return matrix;
             }
 
-            catch(System.FormatException e)
+            catch (FormatException e)
             {
                 Console.WriteLine(e.Message);
             }
