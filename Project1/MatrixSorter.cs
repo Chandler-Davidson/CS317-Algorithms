@@ -10,7 +10,7 @@ namespace Project1
         /// </summary>
         /// <param name="matrix">Matrix.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static void SortRowsIndividually<T>(this Matrix<T> matrix)
+        public static void SortRowsIndividually<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
             matrix.ForEach(x => matrix.SortRow(x, 0, x.Count - 1));

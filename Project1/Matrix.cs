@@ -54,11 +54,5 @@ namespace Project1
                 $"Assignments made: {AssignmentCount}\n" +
                 $"Matrix:\n\n{this}"; 
         }
-
-        public static Matrix<T> operator ++ (Matrix<T> matrix)
-        {
-            matrix.ComparisonCount += 1;
-            return matrix;
-        }
     }
 }

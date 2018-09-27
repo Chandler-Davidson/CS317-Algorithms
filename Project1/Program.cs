@@ -12,7 +12,7 @@ namespace Project1
 
             Console.WriteLine(matrix);
 
-            matrix.SortRowsIndividually();
+            MatrixSorter.SortRowsIndividually(matrix);
 
             Console.WriteLine(matrix);
 
