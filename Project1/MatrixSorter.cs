@@ -14,6 +14,7 @@ namespace Project1
             where T : IComparable<T>
         {
             matrix.ForEach(x => matrix.SortRow(x, 0, x.Count - 1));
+            matrix.SortingMethod = "Method 1";
         }
 
         private static void SortRow<T>(this Matrix<T> matrix, List<T> row, int left, int right)
