@@ -13,43 +13,61 @@ namespace Project1
         public static void SortRowsIndividually<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
-            matrix.ForEach(x => matrix.SortRow(x, 0, x.Count - 1));
+            matrix.ForEach(x => QuickSort(matrix, x, 0, x.Count - 1));
             matrix.SortingMethod = "Method 1";
         }
 
-        private static void SortRow<T>(this Matrix<T> matrix, List<T> row, int left, int right)
+        /// <summary>
+        /// Partitions the specified row from low to high.
+        /// </summary>
+        /// <returns>The partition index.</returns>
+        /// <param name="matrix">Matrix.</param>
+        /// <param name="row">Row.</param>
+        /// <param name="low">Low.</param>
+        /// <param name="high">High.</param>
+        private static int Partition<T>(Matrix<T> matrix, List<T> row, int low, int high)
             where T : IComparable<T>
         {
-            int i = left, j = right;
-            var pivotValue = row[(left + right) / 2];
+            T pivot = row[high];
 
-            while (i <= j)
+            int i = low - 1;
+            for (int j = low; j < high; j++)
             {
-                while (matrix.CompareElements(LessThan, row[i], pivotValue))
+                if (matrix.CompareElements(LessThanOrEqual, row[j], pivot))
                 {
                     i++;
-                }
 
-                while (matrix.CompareElements(GreaterThan, row[j], pivotValue))
-                {
-                    j--;
-                }
-
-                if (i <= j)
-                {
                     T a = row[i], b = row[j];
                     matrix.SwapElements(ref a, ref b);
                     row[i] = a; row[j] = b;
-
-                    i++;
-                    j--;
                 }
             }
 
-            if (left < j)
-                matrix.SortRow(row, left, j);
-            if (i < right)
-                matrix.SortRow(row, i, right);
+            T aa = row[i + 1], bb = row[high];
+            matrix.SwapElements(ref aa, ref bb);
+            row[i + 1] = aa; row[high] = bb;
+
+            return i + 1;
+        }
+
+        /// <summary>
+        /// Quicks the sort.
+        /// </summary>
+        /// <param name="matrix">Matrix.</param>
+        /// <param name="row">Row.</param>
+        /// <param name="low">Low.</param>
+        /// <param name="high">High.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        private static void QuickSort<T>(Matrix<T> matrix, List<T> row, int low, int high)
+            where T : IComparable<T>
+        {
+            if (low < high)
+            {
+                int partition = Partition(matrix, row, low, high);
+
+                QuickSort(matrix, row, low, partition - 1);
+                QuickSort(matrix, row, partition + 1, high);
+            }
         }
 
         /// <summary>
