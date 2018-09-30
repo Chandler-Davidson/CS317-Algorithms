@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Project1
 {
@@ -10,10 +11,38 @@ namespace Project1
         /// </summary>
         /// <param name="matrix">Matrix.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static void SortRowsIndividually<T>(Matrix<T> matrix)
+        public static void SortingMethod2<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
             matrix.ForEach(x => QuickSort(matrix, x, 0, x.Count - 1));
+            var columnSortedMatrix = new Matrix<T>();
+
+            for (int i = 0; i < matrix[0].Count; i++)
+            {
+                var column = matrix.Select(x => x.ElementAt(i)).ToList();
+                QuickSort(matrix, column, 0, column.Count()-1);
+            }
+
+            matrix.SortingMethod = "Method 2";
+        }
+
+        public static void SortingMethod1<T>(Matrix<T> matrix)
+            where T : IComparable<T>
+        {
+            var flattenedMatrix = matrix.SelectMany(x => x).ToList();
+            QuickSort(matrix, flattenedMatrix, 0, flattenedMatrix.Count - 1);
+
+            int rowLength = matrix[0].Count;
+            int colLength = matrix.Count;
+            for (int i = 0; i < colLength; i++)
+            {
+                for (int j = 0; j < rowLength; j++)
+                {
+                    var a = i * rowLength + j;
+                    matrix[i][j] = flattenedMatrix[a];
+                }
+            }
+
             matrix.SortingMethod = "Method 1";
         }
 
