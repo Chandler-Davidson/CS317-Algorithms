@@ -14,7 +14,7 @@ namespace Project1
 
             // Sort each row of the matrix
             var matrix1 = matrix.SortMatrix(MatrixSorter.SortingMethod1);
-            var matrix2 = matrix.SortMatrix(MatrixSorter.SortingMethod1);
+            var matrix2 = matrix.SortMatrix(MatrixSorter.SortingMethod2);
 
             Console.WriteLine(matrix);
             Console.WriteLine(matrix1);

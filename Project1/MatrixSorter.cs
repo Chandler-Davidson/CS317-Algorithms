@@ -10,6 +10,29 @@ namespace Project1
         private static int ComparisonCount;
 
         /// <summary>
+        /// Sorts the matrix using the given sorting method.
+        /// </summary>
+        /// <typeparam name="T">The data type contained in the matrix.</typeparam>
+        /// <param name="sortingMethod">The method in which to sort by - Method1 or Method2</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <returns></returns>
+        public static Matrix<T> SortMatrix<T>(this Matrix<T> matrix, Func<Matrix<T>, Matrix<T>> sortingMethod)
+            where T : IComparable<T>
+        {
+            ComparisonCount = 0;
+            AssignmentCount = 0;
+
+            var sortedMatrix = sortingMethod(matrix);
+
+            sortedMatrix.SortingMethod = sortingMethod.Method.Name;
+            sortedMatrix.ComparisonCount = ComparisonCount;
+            sortedMatrix.AssignmentCount = AssignmentCount;
+            sortedMatrix.RemoveAll(x => x.Count == 0);
+
+            return sortedMatrix;
+        }
+
+        /// <summary>
         /// Sorts all of the elements within the matrix,
         /// then restructures it back to the original format.
         /// </summary>
@@ -41,28 +64,6 @@ namespace Project1
             matrix = matrix.RotateMatrix();
 
             return matrix;
-        }
-
-        /// <summary>
-        /// Sorts the matrix using the given sorting method.
-        /// </summary>
-        /// <typeparam name="T">The data type contained in the matrix.</typeparam>
-        /// <param name="sortingMethod">The method in which to sort by - Method1 or Method2</param>
-        /// <param name="matrix">The matrix.</param>
-        /// <returns></returns>
-        public static Matrix<T> SortMatrix<T>(this Matrix<T> matrix, Func<Matrix<T>, Matrix<T>> sortingMethod)
-            where T : IComparable<T>
-        {
-            ComparisonCount = 0;
-            AssignmentCount = 0;
-
-            var sortedMatrix = sortingMethod(matrix);
-
-            sortedMatrix.SortingMethod = nameof(sortingMethod);
-            sortedMatrix.ComparisonCount = ComparisonCount;
-            sortedMatrix.AssignmentCount = AssignmentCount;
-
-            return sortedMatrix;
         }
 
         /// <summary>
