@@ -14,6 +14,9 @@ namespace Project1
 
         private readonly string[] FileLines;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Parser{T}"/> class.
+        /// </summary>
         public Parser()
         {
             FileLines = File.ReadAllLines(FilePath);
@@ -21,7 +24,7 @@ namespace Project1
         /// <summary>
         /// Parses the input file given by the <see cref="T:Project1.FilePath`1"/> property.
         /// </summary>
-        /// <returns>The file.</returns>
+        /// <returns>The matrix generated from file.</returns>
         public Matrix<T> ParseFile()
         {
             try

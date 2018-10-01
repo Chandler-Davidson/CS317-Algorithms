@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Project1
 {
@@ -19,11 +18,14 @@ namespace Project1
         public static Matrix<T> SortMatrix<T>(this Matrix<T> matrix, Func<Matrix<T>, Matrix<T>> sortingMethod)
             where T : IComparable<T>
         {
+            // Reset counters
             ComparisonCount = 0;
             AssignmentCount = 0;
 
+            // Sort the given matrix
             var sortedMatrix = sortingMethod(matrix);
 
+            // Apply properties
             sortedMatrix.SortingMethod = sortingMethod.Method.Name;
             sortedMatrix.ComparisonCount = ComparisonCount;
             sortedMatrix.AssignmentCount = AssignmentCount;
@@ -42,9 +44,11 @@ namespace Project1
         public static Matrix<T> SortingMethod1<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
+            // Put all matrix elements into a single List, then sort
             var flattenedMatrix = matrix.ToList();
             QuickSort(flattenedMatrix, 0, flattenedMatrix.Count - 1);
 
+            // Return the matrix in the original structure
             return flattenedMatrix.ToMatrix(matrix.RowLength, matrix.ColLength);
         }
 
@@ -57,10 +61,14 @@ namespace Project1
         public static Matrix<T> SortingMethod2<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
+            // Sort each row
             matrix.ForEach(x => QuickSort(x, 0, x.Count - 1));
-            matrix = matrix.RotateMatrix();
 
+            // Sort each column
+            matrix = matrix.RotateMatrix();
             matrix.ForEach(x => QuickSort(x, 0, x.Count - 1));
+
+            // Return the matrix in the original structure
             matrix = matrix.RotateMatrix();
 
             return matrix;

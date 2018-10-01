@@ -54,8 +54,10 @@ namespace Project1
         /// <param name="cols">The capacity of each row.</param>
         public Matrix(int rowSize, int columnSize) : base()
         {
+            // Initialize a new List<List<>>
             var outer = new List<List<T>>(rowSize);
 
+            // Add rowSize number of empty Lists
             for (int i = 0; i < rowSize; i++)
                 outer.Add(new List<T>(columnSize));
 
@@ -145,6 +147,13 @@ namespace Project1
             return matrix;
         }
 
+        /// <summary>
+        /// Converts the given <see cref="List{T}"/> to a <see cref="Matrix{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The data type represented within the <see cref="List{T}"/></typeparam>
+        /// <param name="flatMatrix">The one dimensional list to convert.</param>
+        /// <param name="matrix">The matrix structure to follow.</param>
+        /// <returns>A matrix containing the values from the given <see cref="List{T}"/>.</returns>
         public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, Matrix<T> matrix)
             where T : IComparable<T>
         {
