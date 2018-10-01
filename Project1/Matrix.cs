@@ -29,6 +29,62 @@ namespace Project1
         public string SortingMethod { get; set; } = "Not sorted";
 
         /// <summary>
+        /// Gets the length of the row.
+        /// </summary>
+        /// <value>The length of each row.</value>
+        public int RowLength => this[0].Count;
+
+        /// <summary>
+        /// Gets the length of the columns.
+        /// </summary>
+        /// <value>The length of the columns.</value>
+        public int ColLength => this.Count;
+
+        /// <summary>
+        /// Returns the matrix as a one dimensional list.
+        /// </summary>
+        /// <returns>The matrix as a list.</returns>
+        public List<T> ToList() => this.SelectMany(x => x).ToList();
+
+        /// <summary>
+        /// Initializes a new instance of the Matrix<T> class with
+        /// preinitialized rows with set capacities.
+        /// </summary>
+        /// <param name="rows">The number of rows needed.</param>
+        /// <param name="cols">The capacity of each row.</param>
+        public Matrix(int rowSize, int columnSize) : base()
+        {
+            var outer = new List<List<T>>(rowSize);
+
+            for (int i = 0; i < rowSize; i++)
+                outer.Add(new List<T>(columnSize));
+
+            this.AddRange(outer);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Matrix<T> class that is empty.
+        /// </summary>
+        public Matrix()
+        {
+        }
+
+        /// <summary>
+        /// Returns the matrix so that each collection is a column
+        /// opposed to each sub <see cref="List{T}"/> being a row.
+        /// </summary>
+        /// <returns>The columns of the matrix.</returns>
+        public Matrix<T> RotateMatrix()
+        {
+            var shiftedMatrix = new Matrix<T>();
+
+            for (int i = 0; i < this[0].Count; i++)
+                shiftedMatrix.Add(this.Select(x => x.ElementAt(i)).ToList());
+
+            return shiftedMatrix;
+        }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:Project1.Matrix`1"/>.
         /// </summary>
         /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:Project1.Matrix`1"/>.</returns>
@@ -56,6 +112,43 @@ namespace Project1
                 $"Comparisons made: {ComparisonCount}\n" +
                 $"Assignments made: {AssignmentCount}\n" +
                 $"Matrix:\n\n{this}"; 
+        }
+    }
+
+    /// <summary>
+    /// Extension methods for the conversion of <see cref="List{T}"/> to <see cref="Matrix{T}"/>
+    /// </summary>
+    public static class ListExtension
+    {
+        /// <summary>
+        /// Converts the given <see cref="List{T}"/> to a <see cref="Matrix{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The data type represented within the <see cref="List{T}"/></typeparam>
+        /// <param name="flatMatrix">The one dimensional list to convert.</param>
+        /// <param name="rowLength">The designated length of each row.</param>
+        /// <param name="colLength">The designated length of each column.</param>
+        /// <returns>A matrix containing the values from the given <see cref="List{T}"/>.</returns>
+        public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, int rowLength, int colLength)
+            where T : IComparable<T>
+        {
+            var matrix = new Matrix<T>(rowLength, colLength);
+
+            for (int i = 0; i < colLength; i++)
+            {
+                for (int j = 0; j < rowLength; j++)
+                {
+                    var a = i * rowLength + j;
+                    matrix[i].Add(flatMatrix[a]);
+                }
+            }
+
+            return matrix;
+        }
+
+        public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, Matrix<T> matrix)
+            where T : IComparable<T>
+        {
+            return flatMatrix.ToMatrix(matrix.RowLength, matrix.ColLength);
         }
     }
 }

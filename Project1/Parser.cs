@@ -12,6 +12,12 @@ namespace Project1
         /// <value>The file path.</value>
         public string FilePath { get; set; } = "input.txt";
 
+        private readonly string[] FileLines;
+
+        public Parser()
+        {
+            FileLines = File.ReadAllLines(FilePath);
+        }
         /// <summary>
         /// Parses the input file given by the <see cref="T:Project1.FilePath`1"/> property.
         /// </summary>

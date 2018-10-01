@@ -4,57 +4,75 @@ using System.Linq;
 
 namespace Project1
 {
-    public static class MatrixSorter
+    public static partial class MatrixSorter
     {
+        private static int AssignmentCount;
+        private static int ComparisonCount;
+
         /// <summary>
-        /// Sorts the rows individually.
+        /// Sorts all of the elements within the matrix,
+        /// then restructures it back to the original format.
         /// </summary>
-        /// <param name="matrix">Matrix.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static void SortingMethod2<T>(Matrix<T> matrix)
+        /// <typeparam name="T">The data type contained in the matrix.</typeparam>
+        /// <param name="matrix">The matrix to sort.</param>
+        /// <returns></returns>
+        public static Matrix<T> SortingMethod1<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
-            matrix.ForEach(x => QuickSort(matrix, x, 0, x.Count - 1));
-            var columnSortedMatrix = new Matrix<T>();
+            var flattenedMatrix = matrix.ToList();
+            QuickSort(flattenedMatrix, 0, flattenedMatrix.Count - 1);
 
-            for (int i = 0; i < matrix[0].Count; i++)
-            {
-                var column = matrix.Select(x => x.ElementAt(i)).ToList();
-                QuickSort(matrix, column, 0, column.Count()-1);
-            }
-
-            matrix.SortingMethod = "Method 2";
+            return flattenedMatrix.ToMatrix(matrix.RowLength, matrix.ColLength);
         }
 
-        public static void SortingMethod1<T>(Matrix<T> matrix)
+        /// <summary>
+        /// Sorts the elements in each row individually,
+        /// then sorts the elements in each columns.
+        /// </summary>
+        /// <typeparam name="T">The data type contained in the matrix.</typeparam>
+        /// <param name="matrix">The matrix to sort.</param>
+        public static Matrix<T> SortingMethod2<T>(Matrix<T> matrix)
             where T : IComparable<T>
         {
-            var flattenedMatrix = matrix.SelectMany(x => x).ToList();
-            QuickSort(matrix, flattenedMatrix, 0, flattenedMatrix.Count - 1);
+            matrix.ForEach(x => QuickSort(x, 0, x.Count - 1));
+            matrix = matrix.RotateMatrix();
 
-            int rowLength = matrix[0].Count;
-            int colLength = matrix.Count;
-            for (int i = 0; i < colLength; i++)
-            {
-                for (int j = 0; j < rowLength; j++)
-                {
-                    var a = i * rowLength + j;
-                    matrix[i][j] = flattenedMatrix[a];
-                }
-            }
+            matrix.ForEach(x => QuickSort(x, 0, x.Count - 1));
+            matrix = matrix.RotateMatrix();
 
-            matrix.SortingMethod = "Method 1";
+            return matrix;
+        }
+
+        /// <summary>
+        /// Sorts the matrix using the given sorting method.
+        /// </summary>
+        /// <typeparam name="T">The data type contained in the matrix.</typeparam>
+        /// <param name="sortingMethod">The method in which to sort by - Method1 or Method2</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <returns></returns>
+        public static Matrix<T> SortMatrix<T>(this Matrix<T> matrix, Func<Matrix<T>, Matrix<T>> sortingMethod)
+            where T : IComparable<T>
+        {
+            ComparisonCount = 0;
+            AssignmentCount = 0;
+
+            var sortedMatrix = sortingMethod(matrix);
+
+            sortedMatrix.SortingMethod = nameof(sortingMethod);
+            sortedMatrix.ComparisonCount = ComparisonCount;
+            sortedMatrix.AssignmentCount = AssignmentCount;
+
+            return sortedMatrix;
         }
 
         /// <summary>
         /// Partitions the specified row from low to high.
         /// </summary>
         /// <returns>The partition index.</returns>
-        /// <param name="matrix">Matrix.</param>
         /// <param name="row">Row.</param>
         /// <param name="low">Low.</param>
         /// <param name="high">High.</param>
-        private static int Partition<T>(Matrix<T> matrix, List<T> row, int low, int high)
+        private static int Partition<T>(List<T> row, int low, int high)
             where T : IComparable<T>
         {
             T pivot = row[high];
@@ -62,18 +80,18 @@ namespace Project1
             int i = low - 1;
             for (int j = low; j < high; j++)
             {
-                if (matrix.CompareElements(LessThanOrEqual, row[j], pivot))
+                if (CompareElements(LessThanOrEqual, row[j], pivot))
                 {
                     i++;
 
                     T a = row[i], b = row[j];
-                    matrix.SwapElements(ref a, ref b);
+                    SwapElements(ref a, ref b);
                     row[i] = a; row[j] = b;
                 }
             }
 
             T aa = row[i + 1], bb = row[high];
-            matrix.SwapElements(ref aa, ref bb);
+            SwapElements(ref aa, ref bb);
             row[i + 1] = aa; row[high] = bb;
 
             return i + 1;
@@ -82,20 +100,19 @@ namespace Project1
         /// <summary>
         /// Quicks the sort.
         /// </summary>
-        /// <param name="matrix">Matrix.</param>
         /// <param name="row">Row.</param>
         /// <param name="low">Low.</param>
         /// <param name="high">High.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        private static void QuickSort<T>(Matrix<T> matrix, List<T> row, int low, int high)
+        private static void QuickSort<T>(List<T> row, int low, int high)
             where T : IComparable<T>
         {
             if (low < high)
             {
-                int partition = Partition(matrix, row, low, high);
+                int partition = Partition(row, low, high);
 
-                QuickSort(matrix, row, low, partition - 1);
-                QuickSort(matrix, row, partition + 1, high);
+                QuickSort(row, low, partition - 1);
+                QuickSort(row, partition + 1, high);
             }
         }
 
@@ -104,11 +121,11 @@ namespace Project1
         /// </summary>
         /// <param name="first">The element to assign to.</param>
         /// <param name="second">The element to duplicate the value of.</param>
-        public static void AssignElement<T>(this Matrix<T> matrix, ref T first, T second)
+        public static void AssignElement<T>(ref T first, T second)
             where T : IComparable<T>
         {
             // Track number of assignments made
-            matrix.AssignmentCount += 1;
+            AssignmentCount += 1;
 
             first = second;
         }
@@ -118,16 +135,16 @@ namespace Project1
         /// </summary>
         /// <param name="first">First element.</param>
         /// <param name="second">Second element.</param>
-        public static void SwapElements<T>(this Matrix<T> matrix, ref T first, ref T second)
+        public static void SwapElements<T>(ref T first, ref T second)
             where T : IComparable<T>
         {
             // Temp variable as an intermediate
             var temp = default(T);
-            matrix.AssignElement(ref temp, first);
+            AssignElement(ref temp, first);
 
-            matrix.AssignElement(ref first, second);
+            AssignElement(ref first, second);
 
-            matrix.AssignElement(ref second, temp);
+            AssignElement(ref second, temp);
         }
 
         /// <summary>
@@ -137,43 +154,13 @@ namespace Project1
         /// <param name="operation">Comparison method.</param>
         /// <param name="first">First element.</param>
         /// <param name="second">Second element.</param>
-        public static bool CompareElements<T>(this Matrix<T> matrix, Func<T, T, bool> operation, T first, T second) 
+        public static bool CompareElements<T>(Func<T, T, bool> operation, T first, T second)
             where T : IComparable<T>
         {
-            // Track number of comparisions made
-            matrix.ComparisonCount += 1;
+            // Track number of comparisons made
+            ComparisonCount += 1;
 
             return operation(first, second);
-        }
-
-        private static bool LessThan<T>(T first, T second)
-            where T : IComparable<T>
-        {
-            return first.CompareTo(second) < 0;
-        }
-
-        private static bool GreaterThan<T>(T first, T second)
-            where T : IComparable<T>
-        {
-            return first.CompareTo(second) > 0;
-        }
-
-        private static bool EqualTo<T>(T first, T second) 
-            where T : IComparable<T>
-        {
-            return first.CompareTo(second) == 0;
-        }
-
-        private static bool LessThanOrEqual<T>(T first, T second) 
-            where T : IComparable<T>
-        {
-            return LessThan(first, second) || EqualTo(first, second);
-        }
-
-        private static bool GreaterThanOrEqual<T>(T first, T second) 
-            where T : IComparable<T>
-        {
-            return GreaterThan(first, second) || EqualTo(first, second);
         }
     }
 }

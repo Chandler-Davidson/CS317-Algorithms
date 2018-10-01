@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Project1
@@ -9,15 +10,15 @@ namespace Project1
         {
             // Read matrix in from file
             var parser = new Parser<double>();
-            var matrix1 = parser.ParseFile();
-            var matrix2 = parser.ParseFile();
+            var matrix = parser.ParseFile();
 
+            // Sort each row of the matrix
+            var matrix1 = matrix.SortMatrix(MatrixSorter.SortingMethod1);
+            var matrix2 = matrix.SortMatrix(MatrixSorter.SortingMethod1);
+
+            Console.WriteLine(matrix);
             Console.WriteLine(matrix1);
-
-            // Sort each frow of the matrix
-            MatrixSorter.SortRowsIndividually(matrix1);
-
-            Console.WriteLine(matrix1);
+            Console.WriteLine(matrix2);
 
             // Write the contents of each matrix to file
             File.WriteAllText("cmd0031_1.txt", matrix1.GenerateReport());
