@@ -34,6 +34,7 @@ namespace Project1
 
                 matrix.AddRange(fileLines.Skip(1)
                     .Select(x => x.Split(' ')
+                        .Where(y => !string.IsNullOrEmpty(y))    
                         .Select(y => (T)Convert.ChangeType(y, typeof(T))).ToList()));
 
                 return matrix;
