@@ -137,7 +137,8 @@ namespace Project1
 
             for (int i = 0; i < flatMatrix.Count; i++)
             {
-                matrix.Add(new List<T>());
+                if (i % rowLength == 0)
+                    matrix.Add(new List<T>());
                 matrix[i / rowLength].Add(flatMatrix[i]);
             }
 

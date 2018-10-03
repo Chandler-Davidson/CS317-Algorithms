@@ -29,7 +29,6 @@ namespace Project1
             sortedMatrix.SortingMethod = sortingMethod.Method.Name;
             sortedMatrix.ComparisonCount = ComparisonCount;
             sortedMatrix.AssignmentCount = AssignmentCount;
-            sortedMatrix.RemoveAll(x => x.Count == 0);
 
             return sortedMatrix;
         }

@@ -1,56 +1,62 @@
 Report
 
-Using the given input matrix, the matrix reported the following:
+Using the given 5x7 input matrix, the matrices reported the following:
 
-SortingMethod1
-	Comparisons made: 170
-	Assignments made: 375
+	SortingMethod1
+		Comparisons made: 170
+		Assignments made: 375
 
-SortingMethod2
-	Comparisons made: 129
-	Assignments made: 393
+	SortingMethod2
+		Comparisons made: 129
+		Assignments made: 393
 
-By the numbers, SortingMethod1 used the following: 
-
-SortingMethod1 - SortingMethod2
-	Comparisons made: +41
-	Assignments made: -18 
+	SortingMethod1 - SortingMethod2
+		Comparisons made: +41
+		Assignments made: -18 
 
 SortingMethod2 used 41 less comparisons and 18 more assignments than SortingMethod1. With no further knowledge, one might assume that SortingMethod2 is the greater algorithm because it used significantly less comparisons; however, the two algorithms accomplish two different goals. SortingMethod1 sorts the matrix left to right and SortingMethod2 sorts the matrix from the top left corner to the bottom right corner. For example:
 
 
+	SortingMethod1
+		L O W ---------▶---------▶---------▶---------▶----------▶
+		|--------------------------------------------------------|
+		| 0       0       0       1       1       1       2		 |
+		| 														 |
+		| 2       2       2       2       2       2       2		 |
+		| 														 |
+		| 2       3       4       4       5       5.21    6.6	 |
+		| 														 |
+		| 6.6     7       7       8       8       9       14     |
+		| 													 	 |
+		| 17      18.32   19      28.77   31      51.3    200.36 |
+		|--------------------------------------------------------|
+		---------▶---------▶---------▶---------▶--------▶ H I G H
+
+	SortingMethod2
+		 L O W ---------▶---------▶---------▶---------▶----------▶
+	  L |--------------------------------------------------------|  | 
+	  O | 0       1       2       2       2       2       2      |  | 
+	  W |														 |  ▼ 
+	  | | 0       1       2       5       6.6     7       9      |  | 
+	  | |														 |  | 
+	  ▼ | 0       2       4       5.21    7       8       19     |  ▼ 
+	  | |														 |  
+	  | | 1       2       4       6.6     8       18.32   51.3   |  H 
+	  ▼ |														 |  I 
+	  | | 2       3       14      17      28.77   31      200.36 |  G 
+	  | |--------------------------------------------------------|  H 
+		---------▶---------▶---------▶---------▶--------▶ H I G H
+
+When running the same application with a 100x100 matrix of random numbers within the range 0-99, SortingMethod1 made significantly more comparisons and assignments than SortingMethod2. SortingMethod1 made ~4x more comparisons and ~4.5x more assignments.
+
 SortingMethod1
-	L O W ---------▶---------▶---------▶---------▶----------▶
-	|--------------------------------------------------------|
-	| 0       0       0       1       1       1       2		 |
-	| 														 |
-	| 2       2       2       2       2       2       2		 |
-	| 														 |
-	| 2       3       4       4       5       5.21    6.6	 |
-	| 														 |
-	| 6.6     7       7       8       8       9       14     |
-	| 													 	 |
-	| 17      18.32   19      28.77   31      51.3    200.36 |
-	|--------------------------------------------------------|
-	---------▶---------▶---------▶---------▶--------▶ H I G H
+Comparisons made: 590,261
+Assignments made: 1,618,791
 
 SortingMethod2
-	 L O W ---------▶---------▶---------▶---------▶----------▶
-  L |--------------------------------------------------------|  | 
-  O | 0       1       2       2       2       2       2      |  | 
-  W |														 |  ▼ 
-  | | 0       1       2       5       6.6     7       9      |  | 
-  | |														 |  | 
-  ▼ | 0       2       4       5.21    7       8       19     |  ▼ 
-  | |														 |  
-  | | 1       2       4       6.6     8       18.32   51.3   |  H 
-  ▼ |														 |  I 
-  | | 2       3       14      17      28.77   31      200.36 |  G 
-  | |--------------------------------------------------------|  H 
-	---------▶---------▶---------▶---------▶--------▶ H I G H
+Comparisons made: 149,311
+Assignments made: 351,924
 
-
-
-
-
-
+SortingMethod1 - SortingMethod2
+Comparisons made: +440,950
+Assignments made: +1,266,867
