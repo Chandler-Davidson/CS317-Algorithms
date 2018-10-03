@@ -130,18 +130,15 @@ namespace Project1
         /// <param name="rowLength">The designated length of each row.</param>
         /// <param name="colLength">The designated length of each column.</param>
         /// <returns>A matrix containing the values from the given <see cref="List{T}"/>.</returns>
-        public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, int rowLength, int colLength)
+        public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, int rowLength)
             where T : IComparable<T>
         {
-            var matrix = new Matrix<T>(rowLength, colLength);
+            var matrix = new Matrix<T>();
 
-            for (int i = 0; i < colLength; i++)
+            for (int i = 0; i < flatMatrix.Count; i++)
             {
-                for (int j = 0; j < rowLength; j++)
-                {
-                    var a = i * rowLength + j;
-                    matrix[i].Add(flatMatrix[a]);
-                }
+                matrix.Add(new List<T>());
+                matrix[i / rowLength].Add(flatMatrix[i]);
             }
 
             return matrix;
@@ -157,7 +154,7 @@ namespace Project1
         public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, Matrix<T> matrix)
             where T : IComparable<T>
         {
-            return flatMatrix.ToMatrix(matrix.RowLength, matrix.ColLength);
+            return flatMatrix.ToMatrix(matrix.RowLength);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Project1
             QuickSort(flattenedMatrix, 0, flattenedMatrix.Count - 1);
 
             // Return the matrix in the original structure
-            return flattenedMatrix.ToMatrix(matrix.RowLength, matrix.ColLength);
+            return flattenedMatrix.ToMatrix(matrix.RowLength);
         }
 
         /// <summary>
