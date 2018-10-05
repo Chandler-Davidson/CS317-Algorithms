@@ -74,33 +74,29 @@ namespace Project1
         }
 
         /// <summary>
-        /// Partitions the specified row from low to high.
+        /// Partitions the specified list from low to high.
         /// </summary>
         /// <returns>The partition index.</returns>
-        /// <param name="row">Row.</param>
-        /// <param name="low">Low.</param>
-        /// <param name="high">High.</param>
-        private static int Partition<T>(List<T> row, int low, int high)
+        /// <param name="arr">List of values.</param>
+        /// <param name="low">Low end of list.</param>
+        /// <param name="high">High end of list.</param>
+        private static int Partition<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
         {
-            T pivot = row[high];
+            T pivot = arr[high];
 
             int i = low - 1;
             for (int j = low; j < high; j++)
             {
-                if (CompareElements(LessThanOrEqual, row[j], pivot))
+                if (CompareElements(LessThanOrEqual, arr[j], pivot))
                 {
                     i++;
 
-                    T a = row[i], b = row[j];
-                    SwapElements(ref a, ref b);
-                    row[i] = a; row[j] = b;
+                    SwapElements(arr, i, j);
                 }
             }
 
-            T aa = row[i + 1], bb = row[high];
-            SwapElements(ref aa, ref bb);
-            row[i + 1] = aa; row[high] = bb;
+            SwapElements(arr, i + 1, high);
 
             return i + 1;
         }
@@ -108,19 +104,19 @@ namespace Project1
         /// <summary>
         /// Quicks the sort.
         /// </summary>
-        /// <param name="row">Row.</param>
-        /// <param name="low">Low.</param>
-        /// <param name="high">High.</param>
+        /// <param name="arr">A list of values.</param>
+        /// <param name="low">Low end of the list.</param>
+        /// <param name="high">High end of the list.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        private static void QuickSort<T>(List<T> row, int low, int high)
+        private static void QuickSort<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
         {
             if (low < high)
             {
-                int partition = Partition(row, low, high);
+                int partition = Partition(arr, low, high);
 
-                QuickSort(row, low, partition - 1);
-                QuickSort(row, partition + 1, high);
+                QuickSort(arr, low, partition - 1);
+                QuickSort(arr, partition + 1, high);
             }
         }
 
@@ -141,18 +137,29 @@ namespace Project1
         /// <summary>
         /// Swaps the elements within a matrix.
         /// </summary>
-        /// <param name="first">First element.</param>
-        /// <param name="second">Second element.</param>
-        public static void SwapElements<T>(ref T first, ref T second)
+        /// <param name="arr">List of values that contains the elements to swap.</param>
+        /// <param name="indexA">Index of the first element.</param>
+        /// <param name="indexB">Index of the second element.</param>
+        /// <exception cref="IndexOutOfRangeException"/>
+        public static void SwapElements<T>(this List<T> arr, int indexA, int indexB)
             where T : IComparable<T>
         {
-            // Temp variable as an intermediate
-            var temp = default(T);
-            AssignElement(ref temp, first);
+            try
+            {
+                // Temp variable as an intermediate
+                var temp = default(T);
+                T first = arr[indexA],
+                second = arr[indexB];
 
-            AssignElement(ref first, second);
+                // Swap the elements by reference
+                AssignElement(ref temp, first);
+                AssignElement(ref first, second);
+                AssignElement(ref second, temp);
 
-            AssignElement(ref second, temp);
+                // Reassign to the array
+                arr[indexA] = first;
+                arr[indexB] = second;
+            }
         }
 
         /// <summary>
