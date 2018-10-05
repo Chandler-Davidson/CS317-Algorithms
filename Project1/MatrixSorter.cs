@@ -80,29 +80,36 @@ namespace Project1
         /// <param name="arr">List of values.</param>
         /// <param name="low">Low end of list.</param>
         /// <param name="high">High end of list.</param>
-        private static int Partition<T>(List<T> arr, int low, int high)
+        private static int Partition<T>(List<T> arr, int low, int high, T pivot)
             where T : IComparable<T>
         {
-            T pivot = arr[high];
+            int leftPtr = low;
+            int rightPtr = high - 1;
 
-            int i = low - 1;
-            for (int j = low; j < high; j++)
+            while (true)
             {
-                if (CompareElements(LessThanOrEqual, arr[j], pivot))
-                {
-                    i++;
+                // Iterate until pointer is >= pivot
+                while (CompareElements(LessThan, arr[++leftPtr], pivot));
 
-                    SwapElements(arr, i, j);
-                }
+                // Iterate until pointer is <= pivot
+                while (CompareElements(GreaterThan, arr[--rightPtr], pivot));
+
+                if (leftPtr >= rightPtr)
+                    break;
+
+                SwapElements(arr, leftPtr, rightPtr);
             }
 
-            SwapElements(arr, i + 1, high);
+            SwapElements(arr, leftPtr, high - 1);
 
-            return i + 1;
+            return leftPtr;
         }
 
         /// <summary>
         /// Quicks the sort.
+        /// 
+        /// QuickSort using the MedianOf3 partition method and once the size of
+        /// is small enough, swaps to an iterative sort to reduce comparisons.
         /// </summary>
         /// <param name="arr">A list of values.</param>
         /// <param name="low">Low end of the list.</param>
@@ -111,14 +118,88 @@ namespace Project1
         private static void QuickSort<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
         {
-            if (low < high)
-            {
-                int partition = Partition(arr, low, high);
+            int size = high - low + 1;
 
+            // If 3 or less elements, its faster to sort iteratively
+            if (size <= 3)
+                ManualSort(arr, low, high);
+
+            // Sort recursively using QuickSort
+            else
+            {
+                // Choose the median as the pivot
+                T median = MedianOf3(arr, low, high);
+                int partition = Partition(arr, low, high, median);
+
+                // Recursive call
                 QuickSort(arr, low, partition - 1);
                 QuickSort(arr, partition + 1, high);
             }
         }
+
+        /// <summary>
+        /// Used towards the end of QuickSort to speed up sorting a list of 3 or 
+        /// less elements.
+        /// </summary>
+        /// <param name="arr">A list of values.</param>
+        /// <param name="low">Low end of the list.</param>
+        /// <param name="high">High end of the list.</param>
+        private static void ManualSort<T>(List<T> arr, int low, int high)
+            where T : IComparable<T>
+        {
+            int size = high - low + 1;
+
+            if (size <= 1)
+                return;
+            
+            if (size == 2)
+            {
+                // If out of order, simply swap places
+                if (CompareElements(GreaterThan, arr[low], arr[high]))
+                    SwapElements(arr, low, high);
+                return;
+            }
+            else
+            {
+                // Compare each element, if out of order then swap with neighbors
+                if (CompareElements(GreaterThan, arr[low], arr[high - 1]))
+                    SwapElements(arr, low, high - 1);
+                
+                if (CompareElements(GreaterThan, arr[low], arr[high]))
+                    SwapElements(arr, low, high);
+                
+                if (CompareElements(GreaterThan, arr[high - 1], arr[high]))
+                    SwapElements(arr, high - 1, high);
+            }
+        }
+
+        /// <summary>
+        /// Finds the median of the elements within a list.
+        /// </summary>
+        /// <returns>The median element within the list.</returns>
+        /// <param name="arr">A list of values.</param>
+        /// <param name="low">Low end of the list.</param>
+        /// <param name="high">High end of the list.</param>
+        private static T MedianOf3<T>(List<T> arr, int low, int high)
+            where T : IComparable<T>
+
+        {
+            int center = (low + high) / 2;
+
+            if (CompareElements(GreaterThan, arr[low], arr[center]))
+                SwapElements(arr, low, center);
+
+            if (CompareElements(GreaterThan, arr[low], arr[high]))
+                SwapElements(arr, low, high);
+
+            if (CompareElements(GreaterThan, arr[center], arr[high]))
+                SwapElements(arr, center, high);
+
+            SwapElements(arr, center, high - 1);
+
+            return arr[high - 1];
+        }
+
 
         /// <summary>
         /// Assigns the first element with the second's value.
@@ -144,22 +225,19 @@ namespace Project1
         public static void SwapElements<T>(this List<T> arr, int indexA, int indexB)
             where T : IComparable<T>
         {
-            try
-            {
-                // Temp variable as an intermediate
-                var temp = default(T);
-                T first = arr[indexA],
-                second = arr[indexB];
+            // Temp variable as an intermediate
+            var temp = default(T);
+            T first = arr[indexA],
+            second = arr[indexB];
 
-                // Swap the elements by reference
-                AssignElement(ref temp, first);
-                AssignElement(ref first, second);
-                AssignElement(ref second, temp);
+            // Swap the elements by reference
+            AssignElement(ref temp, first);
+            AssignElement(ref first, second);
+            AssignElement(ref second, temp);
 
-                // Reassign to the array
-                arr[indexA] = first;
-                arr[indexB] = second;
-            }
+            // Reassign to the array
+            arr[indexA] = first;
+            arr[indexB] = second;
         }
 
         /// <summary>
