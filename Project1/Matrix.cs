@@ -47,11 +47,11 @@ namespace Project1
         public List<T> ToList() => this.SelectMany(x => x).ToList();
 
         /// <summary>
-        /// Initializes a new instance of the Matrix<T> class with
+        /// Initializes a new instance of the Matrix class with
         /// preinitialized rows with set capacities.
         /// </summary>
-        /// <param name="rows">The number of rows needed.</param>
-        /// <param name="cols">The capacity of each row.</param>
+        /// <param name="rowSize">The number of rows needed.</param>
+        /// <param name="columnSize">The capacity of each row.</param>
         public Matrix(int rowSize, int columnSize) : base()
         {
             // Initialize a new List<List<>>
@@ -65,7 +65,7 @@ namespace Project1
         }
 
         /// <summary>
-        /// Initializes a new instance of the Matrix<T> class that is empty.
+        /// Initializes a new instance of the Matrix class that is empty.
         /// </summary>
         public Matrix()
         {
@@ -128,7 +128,6 @@ namespace Project1
         /// <typeparam name="T">The data type represented within the <see cref="List{T}"/></typeparam>
         /// <param name="flatMatrix">The one dimensional list to convert.</param>
         /// <param name="rowLength">The designated length of each row.</param>
-        /// <param name="colLength">The designated length of each column.</param>
         /// <returns>A matrix containing the values from the given <see cref="List{T}"/>.</returns>
         public static Matrix<T> ToMatrix<T>(this List<T> flatMatrix, int rowLength)
             where T : IComparable<T>
