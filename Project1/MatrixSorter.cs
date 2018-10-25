@@ -5,8 +5,8 @@ namespace Project1
 {
     public static partial class MatrixSorter
     {
-        private static int AssignmentCount;
-        private static int ComparisonCount;
+        static int AssignmentCount;
+        static int ComparisonCount;
 
         /// <summary>
         /// Sorts the matrix using the given sorting method.

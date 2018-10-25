@@ -64,19 +64,19 @@ namespace Project1
             return operation(first, second);
         }
 
-        private static bool LessThan<T>(T first, T second)
+        static bool LessThan<T>(T first, T second)
             where T : IComparable<T> => first.CompareTo(second) < 0;
 
-        private static bool GreaterThan<T>(T first, T second)
+        static bool GreaterThan<T>(T first, T second)
             where T : IComparable<T> => first.CompareTo(second) > 0;
 
-        private static bool EqualTo<T>(T first, T second)
+        static bool EqualTo<T>(T first, T second)
             where T : IComparable<T> => first.CompareTo(second) == 0;
 
-        private static bool LessThanOrEqual<T>(T first, T second)
+        static bool LessThanOrEqual<T>(T first, T second)
             where T : IComparable<T> => LessThan(first, second) || EqualTo(first, second);
 
-        private static bool GreaterThanOrEqual<T>(T first, T second)
+        static bool GreaterThanOrEqual<T>(T first, T second)
             where T : IComparable<T> => GreaterThan(first, second) || EqualTo(first, second);
     }
 }

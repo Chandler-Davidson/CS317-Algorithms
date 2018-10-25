@@ -5,7 +5,7 @@ namespace Project1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // Read matrix in from file
             var parser = new Parser<double>();

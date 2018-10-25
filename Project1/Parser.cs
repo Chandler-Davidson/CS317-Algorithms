@@ -12,7 +12,7 @@ namespace Project1
         /// <value>The file path.</value>
         public string FilePath { get; set; } = "input.txt";
 
-        private readonly string[] FileLines;
+        readonly string[] FileLines;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parser{T}"/> class.

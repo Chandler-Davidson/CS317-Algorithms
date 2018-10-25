@@ -52,7 +52,7 @@ namespace Project1
         /// </summary>
         /// <param name="rowSize">The number of rows needed.</param>
         /// <param name="columnSize">The capacity of each row.</param>
-        public Matrix(int rowSize, int columnSize) : base()
+        public Matrix(int rowSize, int columnSize)
         {
             // Initialize a new List<List<>>
             var outer = new List<List<T>>(rowSize);

@@ -12,7 +12,7 @@ namespace Project1
         /// <param name="arr">List of values.</param>
         /// <param name="low">Low end of list.</param>
         /// <param name="high">High end of list.</param>
-        private static int Partition<T>(List<T> arr, int low, int high, T pivot)
+        static int Partition<T>(List<T> arr, int low, int high, T pivot)
             where T : IComparable<T>
         {
             int leftPtr = low;
@@ -47,7 +47,7 @@ namespace Project1
         /// <param name="low">Low end of the list.</param>
         /// <param name="high">High end of the list.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        private static void QuickSort<T>(List<T> arr, int low, int high)
+        static void QuickSort<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
         {
             int size = high - low + 1;
@@ -60,8 +60,8 @@ namespace Project1
             else
             {
                 // Choose the median as the pivot
-                T median = MedianOf3(arr, low, high);
-                int partition = Partition(arr, low, high, median);
+                var median = MedianOf3(arr, low, high);
+                var partition = Partition(arr, low, high, median);
 
                 // Recursive call
                 QuickSort(arr, low, partition - 1);
@@ -76,7 +76,7 @@ namespace Project1
         /// <param name="arr">A list of values.</param>
         /// <param name="low">Low end of the list.</param>
         /// <param name="high">High end of the list.</param>
-        private static void ManualSort<T>(List<T> arr, int low, int high)
+        static void ManualSort<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
         {
             int size = high - low + 1;
@@ -91,18 +91,16 @@ namespace Project1
                     SwapElements(arr, low, high);
                 return;
             }
-            else
-            {
-                // Compare each element, if out of order then swap with neighbors
-                if (CompareElements(GreaterThan, arr[low], arr[high - 1]))
-                    SwapElements(arr, low, high - 1);
 
-                if (CompareElements(GreaterThan, arr[low], arr[high]))
-                    SwapElements(arr, low, high);
+            // Compare each element, if out of order then swap with neighbors
+            if (CompareElements(GreaterThan, arr[low], arr[high - 1]))
+                SwapElements(arr, low, high - 1);
 
-                if (CompareElements(GreaterThan, arr[high - 1], arr[high]))
-                    SwapElements(arr, high - 1, high);
-            }
+            if (CompareElements(GreaterThan, arr[low], arr[high]))
+                SwapElements(arr, low, high);
+
+            if (CompareElements(GreaterThan, arr[high - 1], arr[high]))
+                SwapElements(arr, high - 1, high);
         }
 
         /// <summary>
@@ -112,7 +110,7 @@ namespace Project1
         /// <param name="arr">A list of values.</param>
         /// <param name="low">Low end of the list.</param>
         /// <param name="high">High end of the list.</param>
-        private static T MedianOf3<T>(List<T> arr, int low, int high)
+        static T MedianOf3<T>(List<T> arr, int low, int high)
             where T : IComparable<T>
 
         {
