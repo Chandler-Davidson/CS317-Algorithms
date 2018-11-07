@@ -63,19 +63,19 @@ namespace Project2
             return sum;
         }
 
-        public string ToTree()
+        public void ToTree()
         {
-            throw new NotImplementedException();
-            return ToTree(this, 1, this.Count - 1, 0);
+            //throw new NotImplementedException();
+            ToTree(this, 1, this.Count - 1, 0);
         }
 
-        private string ToTree(List<List<int>> roots, int i, int j, int space_needed)
+        private void ToTree(List<List<int>> roots, int i, int j, int space_needed)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
             if (i <= j)
             {
-                var output = new string(' ', space_needed) + roots[i][j];
+                Console.WriteLine(new string(' ', space_needed) + roots[i][j]);
 
                 ToTree(roots, i, roots[i][j] - 1, space_needed++);
 
@@ -85,10 +85,15 @@ namespace Project2
 
         public override string ToString()
         {
-            var output = "";
+            var output = "  ";
+
+            for (int i = 0; i < this[0].Count; i++)
+                output += i.ToString().PadLeft(5);
+            output += "\n\n\n";
 
             for (int i = 0; i < this.Count; i++)
             {
+                output += i.ToString() + "  ";
                 for (int j = 0; j < this[i].Count; j++)
                 {
                     output += this[i][j].ToString().PadLeft(5);

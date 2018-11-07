@@ -17,6 +17,8 @@ namespace Project2
             var table = new DPTable(freq);
 
             Console.WriteLine(table);
+
+            //table.ToTree();
         }
     }
 }
