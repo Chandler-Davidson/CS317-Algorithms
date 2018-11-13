@@ -15,53 +15,67 @@ namespace Project2
         /// <param name="freq"></param>
         public DPTable(List<int> freq)
         {
-            for (int i = 0; i < freq.Count; i++)
-            {
-                this.Add(new List<int>(freq.Count));
+            int n = freq.Count;
 
-                for (int j = 0; j < freq.Count; j++)
-                {
-                    this[i].Add(0);
-                }
-            }
+            // 2D Array as DP Table to store sub-problems,
+            // Inits all indexes to zero
+            int[,] table = new int[n + 1, n + 1];
 
-            int n = freq.Count - 1;
-
+            // Fill in initial probabilities
             for (int i = 0; i < n; i++)
-                this[i][i] = freq[i];
+                table[i, i] = freq[i];
 
-            for (int L = 2; L <= n; L++)
+            // Iterate through the chains of the tree
+            for (int chain = 2; chain <= n; chain++)
             {
-                for (int i = 0; i <= n - L + 1; i++)
+
+                // Iterate through each row
+                for (int row = 0; row <= n - chain + 1; row++)
                 {
-                    int j = i + L - 1;
-                    this[i][j] = int.MaxValue;
 
-                    for (int r = i; r <= j; r++)
+                    // Get the column index
+                    int col = row + chain - 1;
+                    table[row, col] = int.MaxValue; // Initial max value
+
+                    // Minimizing Reccurrance
+                    for (int r = row; r <= col; r++)
                     {
-                        int c = ((r > i) ? this[i][r - 1] : 0)
-                            + ((r < j) ? this[r + 1][j] : 0) 
-                            + Sum(freq.ToArray(), i, j);
 
-                        if (c < this[i][j])
-                            this[i][j] = c;
+                        // Cost when keys[r] becomes root of this subtree
+                        int cost = ((r > row) ? table[row, r - 1] : 0)
+                            + ((r < col) ? table[r + 1, col] : 0) + sum(freq.ToArray(), row, col);
+
+                        // Choose the smaller value
+                        if (cost < table[row, col])
+                            table[row, col] = cost;
                     }
                 }
             }
-        }
 
-        internal int Sum (int[] freq, int i, int j)
-        {
-            int sum = 0;
-            for (int k = i; k <= j; k++)
+            // Local function to get the sum of arr[i] to arr[j]
+            int sum(int[] arr, int i, int j)
             {
-                if (k >= freq.Length)
-                    continue;
-                sum += freq[k];
+                int s = 0;
+                for (int k = i; k <= j; k++)
+                {
+                    if (k >= arr.Length)
+                        continue;
+                    s += freq[k];
+                }
+
+                return s;
             }
 
-            return sum;
+            // Copy the results of cost[,] to the List<List<int>>
+            for (int i = 0; i < freq.Count; i++)
+            {
+                this.Add(new List<int>());
+                for (int j = 0; j < freq.Count; j++)
+                    this[i].Add(table[i, j]);
+            }
         }
+
+
 
         public void ToTree()
         {
